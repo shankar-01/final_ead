@@ -31,13 +31,14 @@ app.get('/receipes', async (req, res)=>{
     res.send(data)
 })
 
-//get receipe b y id
+//get receipe by id
 
 app.get('/receipe/:_id', async (req, res)=>{
     const {_id} = req.params
     const data = await Receipe.findById(_id)
     res.send(data)
 })
+
 
 //add validation middleware
 const validation = require('./middleware/validate')
@@ -46,6 +47,17 @@ app.post('/saveReceipe', validation, upload.single('image'), async (req, res)=>{
     await Receipe.create({...req.body, image:req.file.filename})
     res.send({msg:"Success"})
 })
+
+//update receipes
+app.post('/updateReceipe/:_id', upload.single('image'), async (req, res)=>{
+    if(!req.file){
+        await Receipe.updateOne({_id:req.params._id}, {$set:{...req.body}})
+    }
+    else await Receipe.updateOne({_id:req.params._id}, {$set:{...req.body, image:req.file.filename}})
+    res.send({msg:"Success"})
+})
+
+
 app.listen(4000, ()=>{
     console.log("Server Listening port 4000")
 })
