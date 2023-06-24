@@ -58,6 +58,12 @@ app.post('/updateReceipe/:_id', upload.single('image'), async (req, res)=>{
 })
 
 
+//delete receipes
+app.get('/deleteReceipe/:_id', async (req, res)=>{
+    await Receipe.deleteOne({_id:req.params._id})
+    res.send({msg:"Success"})
+})
+
 app.listen(4000, ()=>{
     console.log("Server Listening port 4000")
 })
