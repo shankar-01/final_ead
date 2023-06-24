@@ -63,7 +63,17 @@ app.get('/deleteReceipe/:_id', async (req, res)=>{
     await Receipe.deleteOne({_id:req.params._id})
     res.send({msg:"Success"})
 })
-
+//search api
+app.get('/search', async function(req, res){
+    try{
+        const searchParams = req.query
+        const rs = await Receipe.find(searchParams)
+        if(!rs) throw Error('Not found')
+        res.status(200).json(rs)
+    }catch(err){
+        res.status(400).json({msg:err})
+    }
+})
 app.listen(4000, ()=>{
     console.log("Server Listening port 4000")
 })
